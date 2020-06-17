@@ -66,6 +66,7 @@
       console.log("finished recording: ", player.recordedData);
     });
   });
+
   function startRecording() {
     if (player.record().isRecording()) {
       player.record().stop();
@@ -73,6 +74,7 @@
       player.record().start();
     }
   }
+
   function handleClick() {
     // the blob object contains the recorded data that
     // can be downloaded by the user, stored on server etc.
@@ -93,22 +95,13 @@
       params: { Bucket: albumBucketName }
     });
 
-    // var files = document.getElementById("photoupload").files;
-    // if (!files.length) {
-    //     return alert("Please choose a file to upload first.");
-    // }
     var uploadFile = player.recordedData;
     var timestamp = new Date().getTime().toString();
     var uploadFile = new File([uploadFile], timestamp);
-    // var uploadFile = JSON.stringify(uploadFile)
-    // var filesList = [uploadFile];
-    // var file = files[0];
-    // var fileName = file.name;
     var albumPhotosKey = "videostuff" + "/";
     var photoKey = albumPhotosKey + timestamp + ".mp4";
 
     // Use S3 ManagedUpload class as it supports multipart uploads
-    // debugger;
     var upload = new AWS.S3.ManagedUpload({
       params: {
         Bucket: albumBucketName,
@@ -117,14 +110,9 @@
       }
     });
 
-    var promise = upload
-      .on("httpUploadProgress", function(evt) {
+    var promise = upload.on("httpUploadProgress", function(evt) {
        document.querySelector("#progressbar>div").style.width = parseInt((evt.loaded * 100) / evt.total) + "%";
-        // console.log(
-        //   "Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + "%"
-        // );
-      })
-      .promise();
+      }).promise();
     promise.then(
       function(data) {
         player.dispose();
@@ -162,15 +150,6 @@
     line-height: 90px;
   }
 
-
-  html,
-  body {
-    height: 100%;
-  }
-  body {
-    margin: 0;
-  }
-
   .content {
     height: 95vh;
     width: 95vw;
@@ -185,21 +164,22 @@
     justify-content: center;
     position: relative;
   }
-  #progressbar {
-  background-color: black;
-  border-radius: 13px;
-  width: 60%;
-  margin: 0 auto;  /* (height of inner div) / 2 + padding */
-  padding: 3px;
-}
 
-#progressbar>div {
-  background-color: orange;
-  width: 1%;
-  /* Adjust with JavaScript */
-  height: 20px;
-  border-radius: 10px;
-}
+  #progressbar {
+    background-color: black;
+    border-radius: 13px;
+    width: 60%;
+    margin: 0 auto;  /* (height of inner div) / 2 + padding */
+    padding: 3px;
+  }
+
+  #progressbar>div {
+    background-color: orange;
+    width: 1%;
+    /* Adjust with JavaScript */
+    height: 20px;
+    border-radius: 10px;
+  }
 </style>
 
 <div class="content">
@@ -209,9 +189,9 @@
     class="video-js vjs-theme-defualt vjs-big-play-centered" />
   <div class="videooverlay">
     {#if uploading}
-    <p>uploading your video</p>
+      <p>uploading your video</p>
     {:else}
-    <p>Check yourself and start recording when you are ready</p>
+      <p>Check yourself and start recording when you are ready</p>
     {/if}
 
     {#if uploading}
