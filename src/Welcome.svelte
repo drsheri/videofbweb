@@ -54,7 +54,7 @@
 <main>
   <section id="Banner" class="content-section">
     <div class="container content-wrap text-center">
-      <h1>Hello from Casper</h1>
+      <h1>Hello from Caspers</h1>
       <h3>
         <em>Take a minute to give us a video review!</em>
       </h3>
