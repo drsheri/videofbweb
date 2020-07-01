@@ -3,7 +3,6 @@
 
   export let location;
 
-
   function onYes() {
       navigate("/video");
   }
@@ -11,6 +10,60 @@
 </script>
 
 <style>
+  .dialogue{
+    /* margin: 25% auto;
+    padding: 20px;
+    right: 20px; */
+  /* position: relative; */
+  
+    width: 100%;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    /* background: rgb(95, 95, 95);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    font-size: 25px; */
+    
+  }
+
+  .dialogue_text_box{
+    background: rgb(95, 95, 95);
+    padding: 30px;
+    margin-bottom: 10px;
+  }
+
+  .dialogue_text_box>p{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    font-size: 25px;
+    
+  }
+
+  .xxdialogue>p{
+    /* margin: 25% auto;
+    padding: 20px;
+    right: 20px; */
+  /* position: relative; */
+  
+    /* width: 100%;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); */
+
+    /* background: rgb(95, 95, 95);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    font-size: 25px; */
+    
+  }
+
+
   main {
     text-align: center;
     padding: 1em;
@@ -18,25 +71,20 @@
     margin: 0 auto;
   }
 
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-  .example_b {
+  .button {
     color: #fff !important;
     text-transform: uppercase;
     text-decoration: none;
-    background: #70ff73;
+    font-size: 20px;
+    background: #434343;
     padding: 10px;
-	width: 100px;
+	  width: 100px;
     border-radius: 5px;
     display: inline-block;
     border: none;
     transition: all 0.4s ease 0s;
   }
-  .example_b:hover {
+  .button:hover {
     background: #434343;
     letter-spacing: 1px;
     -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
@@ -52,9 +100,9 @@
 </style>
 
 <main>
-  <section id="Banner" class="content-section">
+  <!-- <section id="Banner" class="content-section">
     <div class="container content-wrap text-center">
-      <h1>Hello from Caspers</h1>
+      <h1>Hello from your friends at Casper.</h1>
       <h3>
         <em>Take a minute to give us a video review!</em>
       </h3>
@@ -63,6 +111,25 @@
       </div>
 
     </div>
-  </section>
+    
+  </section> -->
+
+    <div class="dialogue">
+
+      <div class="dialogue_text_box">
+        <p>
+          Hello from your friends at Casper.
+          <br><br>
+          Take a minute to give us a video review!
+        </p>
+      </div>
+      
+      <div class="button" align="center" on:click={onYes}>
+          &check;&#8287;&#8287;&#8287;Yes
+      </div>
+    </div>
+
+    
+
   <!-- Header Ends -->
 </main>
