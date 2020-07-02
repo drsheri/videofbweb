@@ -11,23 +11,12 @@
 
 <style>
   .dialogue{
-    /* margin: 25% auto;
-    padding: 20px;
-    right: 20px; */
-  /* position: relative; */
-  
     width: 100%;
     height: auto;
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-
-    /* background: rgb(95, 95, 95);
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 100;
-    font-size: 25px; */
-    
+    transform: translate(-50%, -50%);  
   }
 
   .dialogue_text_box{
@@ -42,27 +31,6 @@
     font-size: 25px;
     
   }
-
-  .xxdialogue>p{
-    /* margin: 25% auto;
-    padding: 20px;
-    right: 20px; */
-  /* position: relative; */
-  
-    /* width: 100%;
-    height: auto;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%); */
-
-    /* background: rgb(95, 95, 95);
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 100;
-    font-size: 25px; */
-    
-  }
-
 
   main {
     text-align: center;
@@ -100,20 +68,6 @@
 </style>
 
 <main>
-  <!-- <section id="Banner" class="content-section">
-    <div class="container content-wrap text-center">
-      <h1>Hello from your friends at Casper.</h1>
-      <h3>
-        <em>Take a minute to give us a video review!</em>
-      </h3>
-      <div class="example_b" align="center" on:click={onYes}>
-          Yes
-      </div>
-
-    </div>
-    
-  </section> -->
-
     <div class="dialogue">
 
       <div class="dialogue_text_box">
@@ -125,7 +79,7 @@
       </div>
       
       <div class="button" align="center" on:click={onYes}>
-          &check;&#8287;&#8287;&#8287;Yes
+          &check;&#8287;&#8287;&#8287;YES
       </div>
     </div>
 
