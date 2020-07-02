@@ -76,7 +76,7 @@
 
       var recorder = document.getElementById('videoRecorder');
       var player = document.getElementById('videoPlayer');
-
+      console.log(player);
       recorder.style.display = "none";
       player.style.display = "block";
 
@@ -102,18 +102,10 @@
 
   function playbackRecording(){
     var player = videojs('videoPlayer');
-    player.play();
     player.on('ended', function(){
       isPlayingback = false;
-      // player.dispose();
-      // // mainDiv
-
-      // let reMake = document.createElement('video');
-      // reMake.id = 'videoPlayer';
-      // reMake.class = 'video-js';
-      // reMake.style = 'display: none;';
-      // document.getElementById('mainDiv').appendChild(reMake);
     });
+    player.play();
     isPlayingback = true;
   }
 
@@ -128,16 +120,18 @@
 
     lastRecording = null;
 
+    var player = videojs('videoPlayer');
+    player.dispose();
+
+    let reMake = document.createElement('video');
+    reMake.id = 'videoPlayer';
+    reMake.classList.add('video-js');
+    reMake.classList.add('svelte-xyztco');
+    reMake.style = 'display: none;';
+    document.getElementById('mainDiv').appendChild(reMake);
+
     var recorder = document.getElementById('videoRecorder');
-    var player = document.getElementById('videoPlayer');
-
     recorder.style.display = "block";
-    player.style.display = "none";
-
-  }
-
-  function uploadVideo(){
-
   }
 
   function readyForRecording(){
@@ -340,8 +334,6 @@
           {/if}
         {/if}
 
-        
-
       </div> <!-- overlay div -->
 
       {#if checkPhase}
@@ -364,11 +356,8 @@
             <button class="buttonPlay" on:click|once={playbackRecording}></button>
           {/if}
           <button class="buttonMidBottom buttonRetry" on:click|once={resetRecording}>&#8635;&#8287;&#8287;RETRY</button>
-          <button class="buttonMidBottom buttonSubmit" on:click|once={handleClick}>&#xf0ee;&#8287;&#8287;SUBMIT</button>
+          <button class="buttonMidBottom buttonSubmit" on:click|once={handleClick}><i class="fa fa-cloud-upload"></i>&#8287;&#8287;SUBMIT</button>
         {/if}
-
-        
-
       {/if}
 
     </div> <!-- content div -->
