@@ -27,9 +27,8 @@
     // recording
     var videoRecorderOptions = {
       controls: false,
-      fill: true,
-      responsive: true,
       fluid: false,
+      fill: true,
       plugins: {
         record: {
           audio: true,
@@ -51,6 +50,8 @@
         RecordRTC.version;
       videojs.log(msg);
       videoRecorder.record().getDevice();
+      console.log(this.videoWidth());
+      console.log(this.videoHeight());
     });
 
     videoRecorder.controlBar.progressControl.disable();
@@ -69,6 +70,58 @@
       console.log("started recording!");
     });
 
+    videoRecorder.on("deviceReady", function(){
+      let videoWidth = this.videoWidth();
+      let videoHeight = this.videoHeight();
+
+      let screenWidth = screen.width;
+      let screenHeight = screen.height;
+
+      let videoRatio = videoWidth / videoHeight;
+      let screenRatio = screenWidth / screenHeight;
+
+      if(videoRatio < screenRatio){
+        let factor = screenHeight / videoHeight;
+        
+        let fillVideoWidth = factor * videoWidth;
+        let fillVideoHeight = factor * videoHeight;
+
+        factor = screenWidth / fillVideoWidth;
+        let finalVideoWidth = screenWidth;
+        let finalVideoHeight = fillVideoHeight * factor;
+
+        let negTopOffset = (screenHeight - finalVideoHeight) / 2;
+
+        let targetDiv = document.getElementById('videoDiv');
+        let tempStr = "width: " + finalVideoWidth + "px; height: " + finalVideoHeight + "px; top: " + negTopOffset + "px;";
+        console.log(tempStr);
+        targetDiv.style.cssText = tempStr;
+
+      }else{
+        let factor = screenWidth / videoWidth;
+        
+        let fillVideoWidth = factor * videoWidth;
+        let fillVideoHeight = factor * videoHeight;
+
+        factor = screenHeight / fillVideoHeight;
+        let finalVideoWidth = fillVideoWidth * factor;
+        let finalVideoHeight = screenHeight;
+
+        let negLeftOffset = (screenWidth - finalVideoWidth) / 2;
+
+        let targetDiv = document.getElementById('videoDiv');
+        let tempStr = "width: " + finalVideoWidth + "px; height: " + finalVideoHeight + "px; left: " + negLeftOffset + "px;";
+        console.log(tempStr);
+        targetDiv.style.cssText = tempStr;
+      }
+
+      console.log(videoWidth);
+      console.log(videoHeight);
+      console.log(screenWidth);
+      console.log(screenHeight);
+      console.log(videoRatio);
+    });
+
     // user completed recording and stream is available
     videoRecorder.on("finishRecord", function() {
       console.log("finished recording: ", videoRecorder.recordedData);
@@ -82,6 +135,9 @@
 
       player.src = window.URL.createObjectURL(lastRecording);
     });
+
+    // 
+
   });
 
   function startRecording() {
@@ -137,6 +193,25 @@
   function readyForRecording(){
     checkPhase = false;
     recordingPhase = true;
+    // let reMake = document.createElement('video');
+    // reMake.id = 'player';
+    // reMake.classList.add('video-js');
+    // reMake.fill = true;
+    // // reMake.classList.add('videoPlayer');
+    // reMake.style.cssText = "width: 100%; height: 100%;";
+
+    // let videoSource = document.createElement('source');
+    // videoSource.src = "video.mp4";
+    // videoSource.type = "video/mp4";
+    
+    // reMake.appendChild(videoSource);
+
+    // document.getElementById('videoDiv').appendChild(reMake);
+
+    // let testPl = videojs('player',{fluid: true});
+    // print(testPl);
+    
+    
   }
 
   function handleClick() {
@@ -193,14 +268,37 @@
 
 <style>
 
+  .videoDiv{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  .videoPlayer{
+    width: 100%;
+    height: 100%;
+  }
+
   /* change player background color */
-  .content .video-js {
+  .content{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    top: 0%;
+    left: 0%;
+    overflow: hidden;
+  }
+
+  .video-js {
     height: 100%;
     width: 100%;
     position: relative;
     top: 0%;
     left: 0%;
   }
+
 
   .videooverlay {
     position: absolute;
@@ -312,11 +410,13 @@
 <main>
     <div id="mainDiv" class="content">
       
-      <video-js id="videoRecorder" playsinline class="video-js vjs-theme-defualt vjs-big-play-centered" />
+      <div id="videoDiv" class="videoDiv">
+        <video-js id="videoRecorder" playsinline class="video-js vjs-theme-defualt vjs-big-play-centered" />
+      </div>
 
-      <video id="videoPlayer" class="video-js" style="display:none;">
+      <video id="videoPlayer" class="video-js" style="display:none;"/>
+
         
-      </video>
 
       {#if uploading}
           <div id="progressbar"><div></div></div>
