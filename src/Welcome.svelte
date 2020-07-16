@@ -1,7 +1,7 @@
 <script>
   import { navigate } from "svelte-routing";
 
-  export let location;
+  // export let location;
 
   function onYes() {
       navigate("/video");
