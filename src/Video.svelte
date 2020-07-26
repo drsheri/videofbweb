@@ -119,9 +119,14 @@
         console.log(tempStr);
         targetDiv.style.cssText = tempStr;
       }
-      if(checkPhase == false)
+      if(checkPhase == false){
         recordingPhase = true;
+        // class="videoDiv"
+        let videoDiv = document.getElementById('videoDiv');
+        videoDiv.classList.add('videoDiv');
+      }
       deviceReady = true;
+
     });
 
     // user completed recording and stream is available
@@ -366,6 +371,14 @@
 </script>
 
 <style>
+  main {
+    background: #fff;
+    width: 100vw;
+    height: 100vh;
+
+    text-align: center;
+    margin: 0 auto;
+  }
 
   .videoDiv{
     position: absolute;
@@ -388,6 +401,7 @@
     top: 0%;
     left: 0%;
     overflow: hidden;
+    background: #fff;
   }
 
   .video-js {
@@ -403,15 +417,19 @@
     position: absolute;
     width: 100%;
     height: auto;
-    background-color: rgba(70, 70, 70, 0.8);
+    background: rgb(50, 50, 50, 0.5);
     text-align: center;
     vertical-align: middle;
   }
 
   .videooverlay>p{
+    color: rgb(0, 0, 0, 0.65);
+    padding: 30px;
+    margin-bottom: 10px;
+
     font-family: Arial, Helvetica, sans-serif;
-    font-weight: 100;
-    font-size: 25px;
+    font-weight: 500;
+    font-size: 28px;
   }
 
   .buttonNext{
@@ -516,6 +534,8 @@
     text-align: center;
     font-size: 26px;
     font-weight: 100;
+    font-family: 'Quicksand';
+    color: rgb(0, 0, 0, 0.65);
   }
 
 </style>
@@ -524,7 +544,7 @@
     <div id="mainDiv" class="content">
       
       {#if !uploading}
-        <div id="videoDiv" class="videoDiv">
+        <div id="videoDiv">
           <video-js id="videoRecorder" playsinline class="video-js vjs-theme-defualt vjs-big-play-centered" />
           <video id="videoPlayer" class="video-js" style="display:none;"/>
         </div>
