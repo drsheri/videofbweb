@@ -1,7 +1,7 @@
 <script>
   import { navigate } from "svelte-routing";
 
-  export let location;
+  // export let location;
 
   function onYes() {
       navigate("/video");
@@ -20,22 +20,26 @@
   }
 
   .dialogue_text_box{
-    background: rgb(95, 95, 95);
+    background: rgb(50, 50, 50, 0.5);
+    color: rgb(0, 0, 0, 0.65);
     padding: 30px;
     margin-bottom: 10px;
   }
 
   .dialogue_text_box>p{
     font-family: Arial, Helvetica, sans-serif;
-    font-weight: 100;
-    font-size: 25px;
+    font-weight: 500;
+    font-size: 28px;
     
   }
 
   main {
+    background: #fff;
+    width: 100vw;
+    height: 100vh;
+
     text-align: center;
     padding: 1em;
-    max-width: 240px;
     margin: 0 auto;
   }
 

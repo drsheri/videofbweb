@@ -119,9 +119,14 @@
         console.log(tempStr);
         targetDiv.style.cssText = tempStr;
       }
-      if(checkPhase == false)
+      if(checkPhase == false){
         recordingPhase = true;
+        // class="videoDiv"
+        let videoDiv = document.getElementById('videoDiv');
+        videoDiv.classList.add('videoDiv');
+      }
       deviceReady = true;
+
     });
 
     // user completed recording and stream is available
@@ -235,8 +240,17 @@
     });
 
     var promise = upload.on("httpUploadProgress", function(evt) {
-       document.querySelector("#progressbar>div").style.width = parseInt((evt.loaded * 100) / evt.total) + "%";
-      }).promise();
+      //  document.querySelector("#progressbar>div").style.width = parseInt((evt.loaded * 100) / evt.total) + "%";
+      if(evt.loaded < 0){
+        updateProgress(0);
+      }else if(evt.loaded <= evt.total){
+        let percentage = evt.loaded / evt.total;
+        updateProgress(percentage);
+      }else{
+        updateProgress(1);
+      }
+    }).promise();
+
     promise.then(
       function(data) {
         videoRecorder.dispose();
@@ -296,9 +310,75 @@
     }
   }
 
+  function updateProgress(percentage){
+    let progressBar = document.getElementById('progCircle');
+    let text = document.getElementById('progText'); 
+    
+    let percentageText;
+    if(percentage > 1)
+      percentageText = "uploading (100%)"
+    else if(percentage < 0)
+      percentageText = "uploading (0%)"
+    else
+      percentageText = "uploading (" + parseInt(percentage * 100) + "%)"
+    text.innerText = percentageText
+
+
+    var angle;
+    let imdValue = percentage / 0.6 // range 0-1
+    angle = imdValue * 225          // range 0-225
+    angle = angle                   // range 0-225
+    angle = angle / 360             // range 0-1
+    percentage = percentage + angle
+    if(percentage >= 1)
+      percentage = percentage - 1
+
+    var barCTX = progressBar.getContext("2d");
+    var quarterTurn = Math.PI / 2;
+    var endingAngle = ((2*percentage) * Math.PI) - quarterTurn;
+    var startingAngle = ((2*angle) * Math.PI) - quarterTurn;
+
+    progressBar.width = progressBar.width;
+    barCTX.lineCap = 'square';
+
+    barCTX.beginPath();
+    barCTX.lineWidth = 8;
+    barCTX.strokeStyle = '#808B96';
+    barCTX.arc(75,75,65,startingAngle, endingAngle);
+    barCTX.stroke();
+  }
+
+
+  // function runTest() {
+  //   debugPhase = true;
+  //   // const refreshRate = 1000 / 60;
+  //   // const maxXPosition = 400;
+  //   // let rect = document.getElementById('rect1');
+  //   // let speedX = 1;
+  //   // let positionX = 0;
+  //   var anim = 0;
+  //   function step() {
+  //     updateProgress(anim);
+  //     anim = anim + 0.005;
+  //     if(anim >= 1)
+  //       anim = 0;
+  //       window.requestAnimationFrame(step);
+  //   }
+
+  //   window.requestAnimationFrame(step);
+  // }
+
 </script>
 
 <style>
+  main {
+    background: #fff;
+    width: 100vw;
+    height: 100vh;
+
+    text-align: center;
+    margin: 0 auto;
+  }
 
   .videoDiv{
     position: absolute;
@@ -321,6 +401,7 @@
     top: 0%;
     left: 0%;
     overflow: hidden;
+    background: #fff;
   }
 
   .video-js {
@@ -336,15 +417,19 @@
     position: absolute;
     width: 100%;
     height: auto;
-    background-color: rgba(70, 70, 70, 0.8);
+    background: rgb(50, 50, 50, 0.5);
     text-align: center;
     vertical-align: middle;
   }
 
   .videooverlay>p{
+    color: rgb(0, 0, 0, 0.65);
+    padding: 30px;
+    margin-bottom: 10px;
+
     font-family: Arial, Helvetica, sans-serif;
-    font-weight: 100;
-    font-size: 25px;
+    font-weight: 500;
+    font-size: 28px;
   }
 
   .buttonNext{
@@ -376,8 +461,9 @@
     font-size: 20px;
     background: #434343;
     border-radius: 5px;
+    border-color: #434343;
     transition: all 0.4s ease 0s;
-    margin-left: -75px;
+    margin: 20px;
   }
 
   .buttonSubmit{
@@ -387,8 +473,9 @@
     font-size: 20px;
     background: #434343;
     border-radius: 5px;
+    border-color: #434343;
     transition: all 0.4s ease 0s;
-    margin-left: 75px;
+    margin: 20px;
   }
 
   .buttonPlay{
@@ -411,6 +498,16 @@
     width: auto;
   }
 
+  .uploadControlls{
+    position: absolute;
+    bottom: 10%;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    border: none;
+    width: auto;
+  }
+
   .content {
     height: 100vh;
     width: 100%;
@@ -421,37 +518,36 @@
     position: relative;
   }
 
-  #progressbar {
-    background-color: black;
-    border-radius: 13px;
-    width: 60%;
-    margin: 0 auto;  /* (height of inner div) / 2 + padding */
-    padding: 3px;
+  #uploadProgressDiv{
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  #progressbar>div {
-    background-color: orange;
-    width: 1%;
-    /* Adjust with JavaScript */
-    height: 20px;
-    border-radius: 10px;
+  #uploadProgressDiv > canvas{
+    width: 80px;
+    height: 80px;
   }
+
+  #uploadProgressDiv > h5{
+    text-align: center;
+    font-size: 26px;
+    font-weight: 100;
+    font-family: 'Quicksand';
+    color: rgb(0, 0, 0, 0.65);
+  }
+
 </style>
 
 <main>
     <div id="mainDiv" class="content">
       
-      <div id="videoDiv" class="videoDiv">
-        <video-js id="videoRecorder" playsinline class="video-js vjs-theme-defualt vjs-big-play-centered" />
-        <video id="videoPlayer" class="video-js" style="display:none;"/>
-      </div>
-
-
-        
-
-      {#if uploading}
-          <div id="progressbar"><div></div></div>
+      {#if !uploading}
+        <div id="videoDiv">
+          <video-js id="videoRecorder" playsinline class="video-js vjs-theme-defualt vjs-big-play-centered" />
+          <video id="videoPlayer" class="video-js" style="display:none;"/>
+        </div>
       {/if}
 
       <div class="videooverlay">
@@ -466,7 +562,16 @@
           {/if}
         {/if}
 
+
       </div> <!-- overlay div -->
+
+      {#if uploading}
+        <div id="uploadProgressDiv">
+          <canvas id="progCircle" width="150px" height="150px"/>
+          <h5 id="progText">uploading (0%)</h5>
+        </div>
+      {/if}
+
 
       {#if checkPhase}
         <button class="buttonMidBottom buttonNext" on:click|once={readyForRecording}>&#10132;&#8287;&#8287;Next</button>
@@ -484,11 +589,13 @@
 
       {#if uploadPhase}
         {#if !uploading}
-          {#if !isPlayingback}
-            <button class="buttonPlay" on:click|once={playbackRecording}></button>
-          {/if}
-          <button class="buttonMidBottom buttonRetry" on:click|once={resetRecording}>&#8635;&#8287;&#8287;RETRY</button>
-          <button class="buttonMidBottom buttonSubmit" on:click|once={handleClick}><i class="fa fa-cloud-upload"></i>&#8287;&#8287;SUBMIT</button>
+            {#if !isPlayingback}
+              <button class="buttonPlay" on:click|once={playbackRecording}></button>
+            {/if}
+          <div class="uploadControlls">
+            <button class="buttonRetry" on:click|once={resetRecording}>&#8635;&#8287;&#8287;RETRY</button>
+            <button class="buttonSubmit" on:click|once={handleClick}><i class="fa fa-cloud-upload"></i>&#8287;&#8287;SUBMIT</button>
+          </div>
         {/if}
       {/if}
 
